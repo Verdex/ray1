@@ -1,6 +1,9 @@
 
 cc = csc
-assemblies = System.Windows.Forms
+assemblies = System.Windows.Forms.dll
 
 all:
-	$(cc) Program.cs -t:exe -o:Display -r:$(assemblies)
+	$(cc) Program.cs -t:exe -out:Display.exe -r:$(assemblies)
+
+clean:
+	rm -rf *.exe 
