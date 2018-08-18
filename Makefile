@@ -1,6 +1,6 @@
 
 cc = csc
-files = Image.cs
+files = Image.cs Png.cs
 
 all: view.exe ray.exe
 
