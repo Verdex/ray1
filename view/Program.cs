@@ -1,5 +1,7 @@
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -8,9 +10,6 @@ namespace ray1.view
 {
     public static class Program
     {
-        private const byte SlashN = 0x0A;
-        private const byte SlashR = 0x0D;
-
         public static void Main(string[] args)
         {
             foreach( var a in args )
@@ -28,47 +27,55 @@ namespace ray1.view
             o.Append( "======================\n" );
             o.Append( $"File name: {fileName}\n\n" );
 
-            var i = 0;
-            // TODO filter out \r\n or whatever it is and replace with \n
-            foreach( var b in SquashEndline( fileBytes ) )
+            var i = 8;
+            while ( i < fileBytes.Length )
             {
-                if ( b == SlashN || b == SlashR )
-                {
-                    o.Append( "\\n\n" );
-                }
-                else
-                {
-                    o.Append( b.ToString( "X2" ) );
-                }
-
-                if ( i > 10 ) 
-                {
-                    o.Append( "\n" );
-                    i = 0;
-                }
-                else
-                {
-                    i++;
-                }
+                var (chunk, newOffset) = PngChunk.Parse( fileBytes, i );
+                i += newOffset;
+                o.Append( chunk.Display() + "\n\n" );
             }
 
             return o.ToString();
         }
 
-        private static IEnumerable<byte> SquashEndline( byte[] bs )
+        private class PngChunk
         {
-            for( var i = 0; i < bs.Length; i ++ )
+            public Int32 Length;
+            public ChunkType Type;
+            public string ChunkTypeString;
+            public byte[] Data;
+            public byte[] Crc;
+
+            public string Display() 
+                => $"Length = {Length} : Type = {ChunkTypeString} : Data = {BitConverter.ToString(Data)} : Crc = {BitConverter.ToString(Crc)}";
+
+            public static (PngChunk, Int32) Parse( byte[] bytes, int offset )
             {
-                if ( i < bs.Length - 1 && bs[i] == SlashR && bs[i+1] == SlashN )
-                {
-                    yield return SlashN;
-                    i++;
-                }
-                else
-                {
-                    yield return bs[i]
-                }
+                var lengthArray = new ArraySegment<byte>( bytes, offset, 4 ).Reverse().ToArray();
+                var length = BitConverter.ToInt32( lengthArray, 0 );
+                Console.WriteLine( "blarg" );
+                var typeArray = new ArraySegment<byte>( bytes, 3 + offset, 4 ).ToArray();
+                Console.WriteLine( $"blarg2 {length}" );
+                var dataArray = new ArraySegment<byte>( bytes, 7 + offset, length ).ToArray();
+                Console.WriteLine( "blarg3" );
+                var crcArray = new ArraySegment<byte>( bytes, length + 7 + offset, 4 ).ToArray();
+                Console.WriteLine( "blarg4" );
+
+                return (new PngChunk 
+                { 
+                    Length = length, 
+                    Type = ChunkType.Unknown, 
+                    ChunkTypeString = Encoding.ASCII.GetString( typeArray ),
+                    Data = dataArray,
+                    Crc = crcArray,
+                }, length + 12);
             }
+        }
+
+        private enum ChunkType 
+        {
+            FirstChunk,
+            Unknown,
         }
     }
 }
