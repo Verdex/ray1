@@ -53,9 +53,9 @@ namespace ray1.view
             {
                 var lengthArray = new ArraySegment<byte>( bytes, offset, 4 ).Reverse().ToArray();
                 var length = BitConverter.ToInt32( lengthArray, 0 );
-                var typeArray = new ArraySegment<byte>( bytes, 3 + offset, 4 ).ToArray();
-                var dataArray = new ArraySegment<byte>( bytes, 7 + offset, length ).ToArray();
-                var crcArray = new ArraySegment<byte>( bytes, length + 7 + offset, 4 ).ToArray();
+                var typeArray = new ArraySegment<byte>( bytes, 4 + offset, 4 ).ToArray();
+                var dataArray = new ArraySegment<byte>( bytes, 8 + offset, length ).ToArray();
+                var crcArray = new ArraySegment<byte>( bytes, length + 8 + offset, 4 ).ToArray();
 
                 return (new PngChunk 
                 { 
