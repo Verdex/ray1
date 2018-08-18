@@ -1,9 +1,14 @@
 
 cc = csc
-assemblies = System.Windows.Forms.dll
+ui = MainForm.cs
+assemblies = System.Windows.Forms.dll 
 
-all:
-	$(cc) Program.cs -t:exe -out:Display.exe -r:$(assemblies)
+all: view.exe
+
+#	$(cc) $(ui) Program.cs -t:exe -out:Display.exe -r:$(assemblies)
+
+view.exe:
+	$(cc) view/Program.cs -t:exe -out:View.exe
 
 clean:
 	rm -rf *.exe 
