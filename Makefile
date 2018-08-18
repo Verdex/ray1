@@ -1,11 +1,11 @@
 
 cc = csc
-ui = MainForm.cs
-assemblies = System.Windows.Forms.dll 
+files = Image.cs
 
-all: view.exe
+all: view.exe ray.exe
 
-#	$(cc) $(ui) Program.cs -t:exe -out:Display.exe -r:$(assemblies)
+ray.exe:
+	$(cc) $(files) Program.cs -t:exe -out:Ray.exe 
 
 view.exe:
 	$(cc) view/Program.cs -t:exe -out:View.exe
