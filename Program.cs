@@ -1,6 +1,6 @@
 
-
 using System;
+using System.Windows.Forms;
 
 namespace ray1
 {
@@ -8,7 +8,6 @@ namespace ray1
     {
         public static void Main()
         {
-            Console.WriteLine( "blah" );
         }
     }
 }
