@@ -1,11 +1,19 @@
 
+using System.Collections.Generic;
+
 namespace ray1
 {
     public class Image
     {
         public int Width;
         public int Height;
-        public Pixel[,] Pixels;
+        public Pixel Pixels;
+        public IEnumerable<PixelRow> Rows;
+    }
+
+    public class PixelRow
+    {
+        public IEnumerable<Pixel> Row;
     }
 
     public class Pixel
