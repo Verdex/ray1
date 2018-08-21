@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using ray1.util;
 
 namespace ray1.view
 {
@@ -45,9 +46,10 @@ namespace ray1.view
             public string ChunkTypeString;
             public byte[] Data;
             public byte[] Crc;
+            public byte[] MyCrc;
 
             public string Display() 
-                => $"Length = {Length} : Type = {ChunkTypeString} : Data = {BitConverter.ToString(Data)} : Crc = {BitConverter.ToString(Crc)}";
+                => $"Length = {Length} : Type = {ChunkTypeString} : Data = {BitConverter.ToString(Data)} : Crc = {BitConverter.ToString(Crc)} : My Crc = {BitConverter.ToString(MyCrc)}";
 
             public static (PngChunk, Int32) Parse( byte[] bytes, int offset )
             {
@@ -64,6 +66,7 @@ namespace ray1.view
                     ChunkTypeString = Encoding.ASCII.GetString( typeArray ),
                     Data = dataArray,
                     Crc = crcArray,
+                    MyCrc = ray1.util.Crc.CalculateCrc( typeArray.Concat( dataArray ).ToArray() ),
                 }, length + 12);
             }
         }
