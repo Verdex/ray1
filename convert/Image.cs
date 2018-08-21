@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-namespace ray1
+namespace ray1.convert
 {
     public class Image
     {
