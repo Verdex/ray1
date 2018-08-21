@@ -7,7 +7,6 @@ namespace ray1.convert
     {
         public int Width;
         public int Height;
-        public Pixel Pixels;
         public IEnumerable<PixelRow> Rows;
     }
 
