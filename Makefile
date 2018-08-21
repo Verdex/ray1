@@ -1,14 +1,19 @@
 
 cc = csc
 files = Image.cs Png.cs
+assemblies = System.Data.dll
 
-all: view.exe ray.exe
+all: View.exe Ray.exe
 
-ray.exe:
-	$(cc) $(files) Program.cs -t:exe -out:Ray.exe 
+Ray.exe:
+	$(cc) $(files) Program.cs -t:exe -out:Ray.exe -r:$(assemblies)
 
-view.exe:
-	$(cc) view/Program.cs -t:exe -out:View.exe
+View.exe: Util.netmodule
+	$(cc) view/Program.cs -addmodule:Util.netmodule -t:exe -out:View.exe
+
+Util.netmodule:
+	$(cc) util/Crc.cs -t:module -out:Util.netmodule
 
 clean:
 	rm -rf *.exe 
+	rm -rf *.netmodule
