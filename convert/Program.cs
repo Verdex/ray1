@@ -41,8 +41,9 @@ P( 4 3 C 18 24)
                         Console.WriteLine( $" b = {column.Blue}");
                     }
                 }
-
             }
+
+            Png.CreatePngFromImage( null );
 
         }
     }
