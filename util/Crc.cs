@@ -1,12 +1,13 @@
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ray1.util
 {
     public static class Crc
     {
-        public static byte[] CalculateCrc( byte[] bytes ) =>
+        public static byte[] CalculateCrc( IEnumerable<byte> bytes ) =>
             BitConverter.GetBytes( ~UpdateCrc( 0xFFFFFFFF, bytes ) ).Reverse().ToArray();
 
         private static UInt32[] _table = new UInt32[]
@@ -50,7 +51,7 @@ namespace ray1.util
             3294710456, 1567103746, 711928724, 3020668471, 3272380065, 1510334235, 755167117 
         };
 
-        private static UInt32 UpdateCrc( UInt32 crc, byte[] buffer )
+        private static UInt32 UpdateCrc( UInt32 crc, IEnumerable<byte> buffer )
         {
             foreach ( var b in buffer )
             { 
