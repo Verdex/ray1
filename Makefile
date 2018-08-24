@@ -12,7 +12,7 @@ View.exe: Util.netmodule
 	$(cc) view/Program.cs -addmodule:Util.netmodule -t:exe -out:View.exe
 
 Convert.exe: Util.netmodule
-	$(cc) $(convert) -t:exe -out:Convert.exe
+	$(cc) $(convert) -addmodule:Util.netmodule -t:exe -out:Convert.exe
 
 Util.netmodule:
 	$(cc) $(util) -t:module -out:Util.netmodule
