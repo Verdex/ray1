@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Linq;
 
 namespace ray1.convert
 {
@@ -41,10 +43,14 @@ P( 4 3 C 18 24)
                         Console.WriteLine( $" b = {column.Blue}");
                     }
                 }
+
+                var bytes = Png.CreatePngFromImage( x );
+                foreach( var b in bytes )
+                {
+                    Console.WriteLine( b.ToString("x") );
+                }
+                File.WriteAllBytes( "blarg.png", bytes.ToArray() );
             }
-
-            Png.CreatePngFromImage( null );
-
         }
     }
 }
