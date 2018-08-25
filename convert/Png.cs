@@ -3,10 +3,9 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using System.IO.Compression;
 
 using static ray1.util.Crc;
+using static ray1.util.Zip;
 
 namespace ray1.convert
 {
@@ -32,8 +31,8 @@ namespace ray1.convert
                                     , 0 // Interlace
                                     } ).ToList() );
 
-        private static List<byte> CreateData( IEnumerable<PixelRow> rows ) =>
-            CreatePngChunk( "IDAT", 
+        private static List<byte> CreateData( IEnumerable<PixelRow> rows ) => 
+           CreatePngChunk( "IDAT", 
                 Compress( rows.SelectMany( r => r.Row )
                               .SelectMany( p => new [] { p.Red, p.Green, p.Blue } )
                               .ToArray() ).ToList() );
@@ -47,16 +46,5 @@ namespace ray1.convert
 
         private static byte[] Int( int i ) => BitConverter.GetBytes( i ).Reverse().ToArray();
         private static byte[] Type( string str ) => Encoding.ASCII.GetBytes( str );
-
-        private static byte[] Compress( byte[] bytes )
-        {
-            using ( var ms = new MemoryStream() )
-            using ( var gs = new GZipStream( ms, CompressionMode.Compress ) )
-            {
-                gs.Write( bytes, 0, bytes.Length );
-                gs.Close();
-                return ms.GetBuffer();
-            }
-        }
     }
 }
