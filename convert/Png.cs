@@ -3,6 +3,8 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 using static ray1.util.Crc;
 using static ray1.util.Zip;
@@ -13,6 +15,25 @@ namespace ray1.convert
     {
         private static readonly byte[] _signature = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
         private static readonly List<byte> _end = CreatePngChunk( "IEND", new List<byte>() );
+
+        public static void SavePngFromImageUsingBitmap( Image image, string fileName )
+        {
+            using ( var bitmap = new Bitmap( image.Width, image.Height ) )
+            {
+                var h = 0;
+                var w = 0;
+                foreach( var row in image.Rows )
+                {
+                    foreach( var pixel in row.Row )
+                    {
+                        bitmap.SetPixel( w, h, Color.FromArgb( pixel.Red, pixel.Green, pixel.Blue ) );
+                        w++;
+                    }
+                    h++;
+                    w = 0;
+                }
+            }
+        }
 
         public static IEnumerable<byte> CreatePngFromImage( Image image ) =>
             _signature.Concat( CreateHeader( width: image.Width, height: image.Height ) )
@@ -33,9 +54,9 @@ namespace ray1.convert
 
         private static List<byte> CreateData( IEnumerable<PixelRow> rows ) => 
            CreatePngChunk( "IDAT", 
-                Compress( rows.SelectMany( r => r.Row )
-                              .SelectMany( p => new [] { p.Red, p.Green, p.Blue } )
-                              .ToArray() ).ToList() );
+                DCompress( rows.SelectMany( r => r.Row )
+                               .SelectMany( p => new [] { p.Red, p.Green, p.Blue } )
+                               .ToArray() ).ToList() );
 
         private static List<byte> CreatePngChunk( string type, List<byte> data )
         {

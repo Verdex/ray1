@@ -6,6 +6,17 @@ namespace ray1.util
 {
     public static class Zip
     {
+        public static byte[] DCompress( byte[] bytes )
+        {
+            using ( var ms = new MemoryStream() )
+            using ( var gs = new DeflateStream( ms, CompressionMode.Compress ) )
+            {
+                gs.Write( bytes, 0, bytes.Length );
+                gs.Close();
+                return ms.GetBuffer();
+            }
+        }
+
         public static byte[] Compress( byte[] bytes )
         {
             using ( var ms = new MemoryStream() )

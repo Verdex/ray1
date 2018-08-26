@@ -43,10 +43,12 @@ namespace ray1.convert
 
             using( var parser = new Parser( inputFile ) )
             {
-                var x = parser.ParseImageFile();
+                var image = parser.ParseImageFile();
 
-                var bytes = Png.CreatePngFromImage( x );
-                File.WriteAllBytes( outputFileName, bytes.ToArray() );
+                Png.SavePngFromImageUsingBitmap( image, outputFileName );
+                //var bytes = Png.CreatePngFromImage( image );
+                //var bytes = Ppm.CreatePpmFromImage( image );
+                //File.WriteAllBytes( outputFileName, bytes.ToArray() );
             }
         }
     }
