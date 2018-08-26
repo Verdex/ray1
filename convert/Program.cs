@@ -8,48 +8,45 @@ namespace ray1.convert
     {
         public static void Main(string[] args)
         {
-            using( var parser = new Parser( 
-@" 
+            /*if ( args.Length != 4 )
+            {
+                Console.WriteLine( "Wrong Number Of Parameters" );
+                Console.WriteLine( "Usage:  Convert.exe -s input.image -d output.png" );
+                return;
+            }
 
-W( 3 )
+            string inputFileName = null;
+            string outputFileName = null;
+            if ( args[0] == "-s" )
+            {
+                inputFileName = args[1];
+            }
+            else
+            {
+                Console.WriteLine( $"Unknown argument:  {args[0]}" ) ;
+            }
 
-H( 4 )
+            if ( args[2] == "-d" )
+            {
+                outputFileName = args[3];
+            }
+            else
+            {
+                Console.WriteLine( $"Unknown argument:  {args[2]}" ) ;
+            }*/
 
-P( 1 1 1 D 19 )
-P( 1 2 2 E 1A )
-P( 1 3 3 F 1B)
-P( 2 1 4 10 1C )
-P( 2 2 5 11 1D)
-P( 2 3 6 12 1E)
-P( 3 1 7 13 1F)
-P( 3 2 8 14 20 )
-P( 3 3 9 15 21)
-P( 4 1 A 16 22 )
-P( 4 2 B 17 23 )
-P( 4 3 C 18 24)
 
-") )
+            string inputFileName = "test.image";
+            string outputFileName = "output.png";
+
+            var inputFile = File.ReadAllText( inputFileName );
+
+            using( var parser = new Parser( inputFile ) )
             {
                 var x = parser.ParseImageFile();
 
-                Console.WriteLine( $" h = {x.Height}");
-                Console.WriteLine( $" w = {x.Width}");
-                foreach( var row in x.Rows )
-                {
-                    foreach( var column in row.Row )
-                    {
-                        Console.WriteLine( $" r = {column.Red}");
-                        Console.WriteLine( $" g = {column.Green}");
-                        Console.WriteLine( $" b = {column.Blue}");
-                    }
-                }
-
                 var bytes = Png.CreatePngFromImage( x );
-                foreach( var b in bytes )
-                {
-                    Console.WriteLine( b.ToString("x") );
-                }
-                File.WriteAllBytes( "blarg.png", bytes.ToArray() );
+                File.WriteAllBytes( outputFileName, bytes.ToArray() );
             }
         }
     }

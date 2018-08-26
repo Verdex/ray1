@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using ray1.util;
+using static ray1.util.Crc;
+using static ray1.util.Zip;
 
 namespace ray1.view
 {
@@ -34,6 +35,28 @@ namespace ray1.view
                 var (chunk, newOffset) = PngChunk.Parse( fileBytes, i );
                 i += newOffset;
                 o.Append( chunk.Display() + "\n\n" );
+                if ( chunk.ChunkTypeString == "IHDR" )
+                {
+                    var h = BitConverter.ToUInt32( chunk.Data, 0 );
+                    var w = BitConverter.ToUInt32( chunk.Data, 4 );
+                    o.Append( $"width = {w} \n" );
+                    o.Append( $"heigth = {h} \n" );
+                    o.Append( $"bit depth = {chunk.Data[8]} \n" );
+                    o.Append( $"color type = {chunk.Data[9]} \n" );
+                    o.Append( $"compression = {chunk.Data[10]} \n" );
+                    o.Append( $"Filter = {chunk.Data[11]} \n" );
+                    o.Append( $"Interlace = {chunk.Data[12]} \n\n" );
+                }
+
+                if ( chunk.ChunkTypeString == "IDAT" )
+                {
+                    var g = chunk.Data.Skip(2).ToArray();
+                    var gg = new ArraySegment<byte>( g, 0, g.Length - 4 ).ToArray();
+                    o.Append( $"My adler = {BitConverter.ToString(CalculateAdlerCrc( gg ))}\n\n" );
+                    o.Append( $"My Data = {BitConverter.ToString(gg)}\n\n" );
+                    //var d = Decompress( chunk.Data );
+                    //o.Append( $"Decompressed Data = {BitConverter.ToString(d)}\n\n" );
+                }
             }
 
             return o.ToString();
@@ -66,7 +89,7 @@ namespace ray1.view
                     ChunkTypeString = Encoding.ASCII.GetString( typeArray ),
                     Data = dataArray,
                     Crc = crcArray,
-                    MyCrc = ray1.util.Crc.CalculateCrc( typeArray.Concat( dataArray ).ToArray() ),
+                    MyCrc = CalculateCrc( typeArray.Concat( dataArray ).ToArray() ),
                 }, length + 12);
             }
         }

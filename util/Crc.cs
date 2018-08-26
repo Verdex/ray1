@@ -59,6 +59,23 @@ namespace ray1.util
             }
             return crc;
         }
+
+        public static byte[] CalculateAdlerCrc( IEnumerable<byte> bytes ) =>
+            BitConverter.GetBytes( UpdateAdler32( 1, bytes ) );
+
+        private static UInt32 UpdateAdler32( UInt32 crc, IEnumerable<byte> buffer )
+        {
+            const UInt16 prime = 65521;
+            var s1 = crc & 0xFFFF;
+            var s2 = (crc >> 16 ) & 0xFFFF;
+            
+            foreach( var b in buffer )
+            {
+                s1 = ( s1 + b ) % prime;
+                s2 = ( s2 + s1 ) % prime;
+            }
+            return ( s2 << 16 ) + s1;
+        }
     }
 }
 
