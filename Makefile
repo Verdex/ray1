@@ -1,6 +1,6 @@
 
 cc = csc
-convert = convert/Image.cs convert/Png.cs convert/Program.cs convert/Parser.cs
+convert = convert/Image.cs convert/Png.cs convert/Program.cs convert/Parser.cs convert/Ppm.cs
 util = util/Crc.cs util/Zip.cs
 
 all: View.exe Ray.exe Convert.exe
