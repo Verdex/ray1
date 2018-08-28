@@ -5,7 +5,7 @@ namespace ray1.standard
     {
         public static void Main()
         {
-
+             
         }
     }
 }
