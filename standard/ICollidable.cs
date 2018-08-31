@@ -6,9 +6,8 @@ namespace ray1.standard
     // todo emissive - color object gives off
     // todo specular - color object gives off on shiny surface (I think there's an angle at which this occurs at)
 
-    public interface Collidable
+    public interface ICollidable
     {
-        bool Collides( Point lineStartPoint, Direction lineDirection );
-        
+        Point Collides( Line line );
     }
 }
