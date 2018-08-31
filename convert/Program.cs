@@ -36,8 +36,8 @@ namespace ray1.convert
             }*/
 
 
-            string inputFileName = "test.image";
-            string outputFileName = "output.png";
+            string inputFileName = "Jabber.image";
+            string outputFileName = "Jabber.png";
 
             var inputFile = File.ReadAllText( inputFileName );
 

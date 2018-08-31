@@ -32,6 +32,7 @@ namespace ray1.convert
                     h++;
                     w = 0;
                 }
+                bitmap.Save( fileName, ImageFormat.Png );
             }
         }
 
