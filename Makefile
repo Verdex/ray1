@@ -2,7 +2,7 @@
 cc = csc
 convert = convert/Image.cs convert/Png.cs convert/Program.cs convert/Parser.cs convert/Ppm.cs
 util = util/Crc.cs util/Zip.cs
-standard = standard/Util.cs standard/Geom.cs standard/ICollidable.cs standard/Program.cs
+standard = standard/*.cs 
 
 all: View.exe Ray.exe Convert.exe Standard.exe
 

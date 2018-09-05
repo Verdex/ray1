@@ -1,41 +1,8 @@
 
-
-using System;
 using static ray1.standard.Util;
 
 namespace ray1.standard
 {
-    public class Point
-    {
-        public double X;
-        public double Y;
-        public double Z;
-    }
-
-    public class Line
-    {
-        public Point Start;
-        public Point End;
-
-        public Point AtPositiveT( double t )
-        {
-            if ( t < 0 )
-            {
-                return null;
-            }
-
-            return At( t );
-        }
-
-        public Point At( double t )
-        {
-            var x = Start.X + t * (End.X - Start.X);
-            var y = Start.Y + t * (End.Y - Start.Y);
-            var z = Start.Z + t * (End.Z - Start.Z);
-            return new Point { X = x, Y = y, Z = z };
-        }
-    }
-
     public class Sphere : ICollidable
     {
         public Point Center;
@@ -56,18 +23,15 @@ namespace ray1.standard
                   - 2 * ( Center.X * line.Start.X + Center.Y * line.Start.Y + Center.Z * line.Start.Z )
                   - Square( Radius );
 
-            Console.WriteLine( $"a  = {a} :: b = {b} :: c = {c}");
 
             var determineIntersection = Square( b ) - 4 * a * c;
 
             if ( determineIntersection < 0 )
             {
-                Console.WriteLine( "NULL" );
                 return null;
             }
             else if ( determineIntersection == 0 )
             {
-                Console.WriteLine( "Single Point" );
                 return line.At( -b / (2 * a) ); 
             }
             else
@@ -88,10 +52,6 @@ namespace ray1.standard
                     return posPoint;
                 }
                 
-                Console.WriteLine( "Double Point" );
-                Console.WriteLine( $"POS Intersect X = {posPoint.X} :: Y = {posPoint.Y} :: Z = {posPoint.Z}" );
-                Console.WriteLine( $"NEG Intersect X = {negPoint.X} :: Y = {negPoint.Y} :: Z = {negPoint.Z}" );
-
                 return DistanceSquared( line.Start, posPoint ) < DistanceSquared( line.Start, negPoint ) 
                         ? posPoint : negPoint;
             }
